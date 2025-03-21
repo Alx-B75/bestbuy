@@ -1,9 +1,10 @@
-import products
-
 
 class Store:
-    def __init__(self):
-        self.products = []
+    def __init__(self, products=None):
+        if products is None:
+            self.products = []
+        else:
+            self.products = products
 
     def add_product(self, product):
         if product not in self.products:
@@ -44,29 +45,6 @@ class Store:
                 print(f"{product.name} is not available in the store.")
 
         return total_price
-
-bose = products.Product("Bose QuietComfort Earbuds", price=250, quantity=500)
-mac = products.Product("MacBook Air M2", price=1450, quantity=100)
-
-# instance of a store
-best_buy = Store()
-
-pixel = products.Product("Google Pixel 7", price=500, quantity=250)
-best_buy.add_product(pixel)
-best_buy.add_product(bose)
-best_buy.add_product(mac)
-
-
-
-
-product_list = [products.Product("MacBook Air M2", price=1450, quantity=100),
-                products.Product("Bose QuietComfort Earbuds", price=250, quantity=500),
-                products.Product("Google Pixel 7", price=500, quantity=250),
-                 ]
-
-products = best_buy.get_all_products()
-print(best_buy.get_total_quantity())
-print(best_buy.order([(products[0], 1), (products[1], 2)]))
 
 
 
