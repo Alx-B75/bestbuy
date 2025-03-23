@@ -1,5 +1,6 @@
 
 class Store:
+    """A class representing a store that manages products and orders."""
     def __init__(self, products=None):
         if products is None:
             self.products = []
@@ -27,6 +28,7 @@ class Store:
         return total_products
 
     def get_all_products(self):
+        """Returns a list of all active products currently in stock."""
         all_products = []
         for product in self.products:
             if product.is_active():
@@ -34,6 +36,13 @@ class Store:
         return all_products
 
     def order(self, shopping_list):
+        """
+        Processes an order for multiple products.
+        Args:
+            shopping_list (list): A list of tuples containing (Product, quantity).
+        Returns:
+            float: The total cost of the processed order.
+        """
         total_price = 0.0
         for product, quantity in shopping_list:
             if product in self.products:

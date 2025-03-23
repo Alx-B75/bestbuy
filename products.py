@@ -1,11 +1,20 @@
 
 
 class Product:
+    """A class representing a product in the store."""
+
     def __init__(self, name: str, price: float, quantity: int):
         self.name = name
         self.price = price
         self.quantity = quantity
         self.active = True if quantity > 0 else False
+        """
+                Initializes a Product instance.
+                Args:
+                    name (str): The product's name.
+                    price (float): The product's price.
+                    quantity (int): The available quantity.
+                """
 
     def get_quantity(self):
         return self.quantity
@@ -28,10 +37,18 @@ class Product:
         self.active = False
 
     def show(self):
+        """Returns a formatted string with product details: name, price, and quantity."""
         product_details = f"{self.name}, Price: {self.price}, Quantity: {self.quantity}"
         return product_details
 
     def buy(self, quantity):
+        """
+            Processes the purchase of a product.
+            Args:
+                quantity (int): The number of items to purchase.
+            Returns:
+                float: The total price for the purchase or 0 if not enough stock.
+            """
         if quantity > self.quantity:
             print(f"Not enough stock to buy {quantity} {self.name}. {self.quantity} available to sell.")
             return 0
