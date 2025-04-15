@@ -3,11 +3,18 @@
 class Product:
     """A class representing a product in the store."""
 
+
     def __init__(self, name: str, price: float, quantity: int):
+        if not name or name.strip() == "":
+            raise ValueError("Product name cannot be empty")
+        if price < 0:
+            raise ValueError("Product price must be a positive number")
         self.name = name
         self.price = price
         self.quantity = quantity
         self.active = True if quantity > 0 else False
+
+
         """
                 Initializes a Product instance.
                 Args:
