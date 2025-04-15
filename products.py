@@ -1,3 +1,5 @@
+from itertools import product
+from platform import processor
 
 
 class Product:
@@ -12,7 +14,6 @@ class Product:
         self.name = name
         self.price = price
         self.quantity = quantity
-        self.active = True if quantity > 0 else False
 
 
         """
@@ -65,21 +66,56 @@ class Product:
             self.active = False
         return buy_price
 
+    @property
+    def active(self):
+        return self.quantity > 0
 
-def main():
-    bose = Product("Bose QuietComfort Earbuds", price=250, quantity=500)
-    mac = Product("MacBook Air M2", price=1450, quantity=100)
 
-    print(bose.buy(50))
-    print(mac.buy(100))
-    print(mac.is_active())
+class NonStockedProduct(Product):
+    def __init__(self, name, price):
+      super().__init__(name, price, quantity=0)
 
-    print(bose.show())
-    print(mac.show())
+    @property
+    def active(self):
+        return True
 
-    bose.set_quantity(1000)
-    print(bose.show())
+    def buy(self, quantity):
+        return  self.price * quantity
 
-if __name__ == '__main__':
-    main()
+    def show(self):
+        return super().show() + "***non-stock item***"
+
+
+class LimitedProduct(Product):
+    def __init__(self, name, price, quantity, maximum):
+        super().__init__(name, price, quantity)
+        self.maximum = maximum
+
+    def buy(self, quantity):
+        if quantity <= self.maximum:
+            return super().buy(quantity)
+        else:
+            raise ValueError(f"Cannot buy more than {self.maximum} of this item.")
+
+    def show(self):
+        return super().show() + f" (Limit: {self.maximum} per order)"
+
+
+
+# def main():
+#     bose = Product("Bose QuietComfort Earbuds", price=250, quantity=500)
+#     mac = Product("MacBook Air M2", price=1450, quantity=100)
+#
+#     print(bose.buy(50))
+#     print(mac.buy(100))
+#     print(mac.is_active())
+#
+#     print(bose.show())
+#     print(mac.show())
+#
+#     bose.set_quantity(1000)
+#     print(bose.show())
+
+# if __name__ == '__main__':
+#     main()
 
