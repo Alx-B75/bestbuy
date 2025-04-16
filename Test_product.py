@@ -1,5 +1,5 @@
 import pytest
-from products import Product, NonStockedProduct, PercentageDiscount
+from products import Product, NonStockedProduct, PercentageDiscount, SecondItemHalfPrice, Buy2Get1Free
 
 
 def test_product():
@@ -51,6 +51,22 @@ def test_buy_with_promotion_applied():
     result = product.buy(2)
     assert result == 240
     assert product.quantity == 98
+
+def test_second_item_half_price_applied():
+    promo = SecondItemHalfPrice("Second item half price")
+    product = Product("Notebook", price=30, quantity=10, promotion=promo)
+    total = product.buy(3)
+    # 30 (full) + 15 (half) + 30 (full) = 75
+    assert total == 75
+
+def test_buy2_get1_free_applied():
+    promo = Buy2Get1Free("Buy 2 Get 1 Free")
+    product = Product("Pen Pack", price=15, quantity=10, promotion=promo)
+    total = product.buy(6)
+    # Should pay for 4 (2 sets of 3 = 2 free) → 4 * 15 = 60
+    assert total == 60
+
+
 
 
 
