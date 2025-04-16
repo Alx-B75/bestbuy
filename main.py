@@ -8,7 +8,6 @@ def list_products(store_obj):
     for product in store_obj.get_all_products():
         print(f"- {product.show()}")
     print()
-111
 
 def show_total_quantity(store_obj):
     """Displays the total number of products available in stock."""

@@ -1,5 +1,5 @@
 import pytest
-from products import Product, NonStockedProduct
+from products import Product, NonStockedProduct, PercentageDiscount
 
 
 def test_product():
@@ -44,5 +44,13 @@ def test_non_stocked_products_work_as_expected():
     result = product.buy(3)
     assert result == 297
     assert product.quantity == 0
+
+def test_buy_with_promotion_applied():
+    promo = PercentageDiscount("20% off", 20)
+    product = Product("MacBook Air M2", price=150, quantity=100, promotion=promo)
+    result = product.buy(2)
+    assert result == 240
+    assert product.quantity == 98
+
 
 

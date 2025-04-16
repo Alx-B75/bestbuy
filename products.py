@@ -1,12 +1,13 @@
 from itertools import product
 from platform import processor
+from abc import ABC, abstractmethod
 
 
 class Product:
     """A class representing a product in the store."""
 
 
-    def __init__(self, name: str, price: float, quantity: int):
+    def __init__(self, name: str, price: float, quantity: int, promotion=None):
         if not name or name.strip() == "":
             raise ValueError("Product name cannot be empty")
         if price < 0:
@@ -14,6 +15,8 @@ class Product:
         self.name = name
         self.price = price
         self.quantity = quantity
+        self._active = quantity > 0
+        self.promotion = promotion
 
 
         """
@@ -22,6 +25,7 @@ class Product:
                     name (str): The product's name.
                     price (float): The product's price.
                     quantity (int): The available quantity.
+                    promotion (float): Promotion applied?
                 """
 
     def get_quantity(self):
@@ -45,9 +49,13 @@ class Product:
         self.active = False
 
     def show(self):
-        """Returns a formatted string with product details: name, price, and quantity."""
-        product_details = f"{self.name}, Price: {self.price}, Quantity: {self.quantity}"
+        """Returns a formatted string with product details: name, price, quantity and promotion if applicable."""
+        if self.promotion:
+            product_details = f"{self.name}, Price: {self.price}, Quantity: {self.quantity}, Promotion applied: {self.promotion.name}"
+        else:
+            product_details = f"{self.name}, Price: {self.price}, Quantity: {self.quantity}"
         return product_details
+
 
     def buy(self, quantity):
         """
@@ -61,14 +69,28 @@ class Product:
             print(f"Not enough stock to buy {quantity} {self.name}. {self.quantity} available to sell.")
             return 0
         self.quantity -= quantity
-        buy_price = self.price * quantity
+        if self.promotion:
+            buy_price = self.promotion.apply_promotion(self, quantity)
+        else:
+            buy_price = self.price * quantity
         if self.quantity == 0:
             self.active = False
         return buy_price
 
+
+    def get_promotion(self):
+        return self.promotion
+
+    def set_promotion(self, promotion):
+        self.promotion = promotion
+
     @property
     def active(self):
-        return self.quantity > 0
+        return self._active
+
+    @active.setter
+    def active(self, value):
+        self._active = value
 
 
 class NonStockedProduct(Product):
@@ -101,6 +123,44 @@ class LimitedProduct(Product):
         return super().show() + f" (Limit: {self.maximum} per order)"
 
 
+
+class Promotion(ABC):
+    def __init__(self, name):
+        self.name = name
+
+    @abstractmethod
+    def apply_promotion(self, product, quantity):
+        pass
+
+class PercentageDiscount(Promotion):
+    def __init__(self, name, percent):
+        super().__init__(name)
+        self.percent = percent
+
+    def apply_promotion(self, product, quantity):
+        return (product.price * quantity) * (1 - self.percent / 100)
+
+class SecondItemHalfPrice(Promotion):
+    def __init__(self, name):
+        super().__init__(name)
+
+
+    def apply_promotion(self, product, quantity):
+        discounted_pairs = quantity // 2
+        full_price_items = quantity % 2
+        total_price = (discounted_pairs * 1.5 * product.price) + (full_price_items * product.price)
+        return total_price
+
+class Buy2Get1Free(Promotion):
+    def __init__(self, name):
+        super().__init__(name)
+
+
+    def apply_promotion(self, product, quantity):
+        free_items = quantity // 3
+        paid_items = quantity - free_items
+        total_price = paid_items * product.price
+        return total_price
 
 # def main():
 #     bose = Product("Bose QuietComfort Earbuds", price=250, quantity=500)
