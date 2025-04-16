@@ -9,6 +9,7 @@ def list_products(store_obj):
         print(f"- {product.show()}")
     print()
 
+
 def show_total_quantity(store_obj):
     """Displays the total number of products available in stock."""
     total = store_obj.get_total_quantity()
@@ -55,8 +56,8 @@ def quit_store():
     print("\nGoodbye!")
     exit()
 
-def start(store_obj):
 
+def start(store_obj):
     # Dispatcher
     dispatcher = {
         "1": list_products,

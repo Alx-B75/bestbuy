@@ -1,6 +1,6 @@
-
 class Store:
     """A class representing a store that manages products and orders."""
+
     def __init__(self, products=None):
         if products is None:
             self.products = []
@@ -54,10 +54,3 @@ class Store:
                 print(f"{product.name} is not available in the store.")
 
         return total_price
-
-
-
-
-
-
-

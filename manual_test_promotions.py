@@ -1,6 +1,5 @@
 from products import Product, PercentageDiscount, SecondItemHalfPrice, Buy2Get1Free
 
-
 promo1 = PercentageDiscount("20% off", 20)
 promo2 = SecondItemHalfPrice("Second item half price")
 promo3 = Buy2Get1Free("Buy 2 Get 1 Free")
