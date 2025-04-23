@@ -93,6 +93,15 @@ def main():
                     products.Product("Google Pixel 7", price=500, quantity=250)
                     ]
     best_buy = store.Store(product_list)
+
+    for product in product_list:
+        if "MacBook" in product.name:
+            product.set_promotion(products.PercentageDiscount("10% off MacBook", 10))
+        elif "Bose" in product.name:
+            product.set_promotion(products.SecondItemHalfPrice("Second Bose half price"))
+        elif "Pixel" in product.name:
+            product.set_promotion(products.Buy2Get1Free("Buy 2 Pixel 7 get 1 free"))
+
     start(best_buy)
 
 
